@@ -13,6 +13,6 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', function (\Predis\Client $client) use ($router) {
+    $client->auth(env('REDIS_PASSWORD'));
 });

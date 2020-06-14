@@ -13,6 +13,8 @@
 |
 */
 
-$router->get('/', function (\Predis\Client $client) use ($router) {
-    $client->auth(env('REDIS_PASSWORD'));
+$router->group(['prefix' => '/room'], function () use ($router) {
+    $router->post('', 'RoomController@store');
+    $router->get('/{uuid}', 'RoomController@get');
+
 });

@@ -13,8 +13,13 @@
 |
 */
 
+$router->get('/',function (){
+
+});
+
 $router->group(['prefix' => '/room'], function () use ($router) {
     $router->post('', 'RoomController@store');
+    $router->get('/', 'RoomController@all');
     $router->get('/{uuid}', 'RoomController@get');
-
+    $router->delete('/','RoomController@destroy'); // TODO Only on Local
 });

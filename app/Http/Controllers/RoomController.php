@@ -2,38 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Helper;
+use App\Services\RoomService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class RoomController extends Controller
 {
-    /**
-     * @param Helper $helper
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store(Helper $helper)
+    public function store(RoomService $service, Request $request)
     {
-        $uuid = $helper->createHash();
-        $expire = $helper->createExpire();
-        $visitor = $helper->createVisitor();
+        $this->validate($request, $service->rules());
 
-        $set = app('redis')->set($uuid, json_encode([
-            'user'    => $visitor,
-            'room_id' => $uuid
-        ]), $expire);
+        $saved = $service->save($request->get('username'));
 
-        return $set ? app('redis')->get($uuid) :
-            response()->json([
-                'message' => 'Room not created'
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        return !$saved ? response()->json([
+            'message' => 'Failed to create room'
+        ], Response::HTTP_INTERNAL_SERVER_ERROR) : response()->json($saved);
+
     }
 
-    /**
-     * @param $uuid
-     * @return mixed
-     */
     public function get($uuid)
     {
-        return app('redis')->get($uuid);
+        return response()->json(app('redis')->get($uuid));
+    }
+
+    public function all()
+    {
+        return app('redis')->keys('*');
+    }
+
+    public function destroy()
+    {
+        return app('redis')->flushdb();
     }
 }

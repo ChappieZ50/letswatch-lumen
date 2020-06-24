@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Rules\RecaptchaRule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class RoomService
@@ -15,7 +16,7 @@ class RoomService
 
     public function createExpire()
     {
-        return 60 * 60 * 12;
+        return 3600 * 24; // 24 Hours
     }
 
     public function rules()
@@ -23,19 +24,21 @@ class RoomService
         return [
             'username'  => 'required|max:15|min:3|string',
             'recaptcha' => ['required', 'string', new RecaptchaRule()],
+            'uuid'      => 'required|uuid'
         ];
     }
 
-    public function save($username)
+    public function save(Request $request)
     {
         $uuid = $this->createHash();
         $expire = $this->createExpire();
 
         return app('redis')->set($uuid, json_encode([
-            'user'    => $username,
+            'user'    => $request->get('username'),
             'room_id' => $uuid,
+            'user_id' => $request->get('uuid'),
             'users'   => []
-        ]), $expire) ? app('redis')->get($uuid) : false;
+        ]), 'ex', $expire) ? app('redis')->get($uuid) : false;
     }
 
 }

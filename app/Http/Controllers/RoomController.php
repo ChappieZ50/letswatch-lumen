@@ -8,14 +8,19 @@ use Illuminate\Http\Response;
 
 class RoomController extends Controller
 {
+    protected $defaultErrorMessage = 'Failed to create room';
+
     public function store(RoomService $service, Request $request)
     {
-        $this->validate($request, $service->rules());
+        $this->validate($request, $service->rules()/*, [
+            'uuid.required' => $this->defaultErrorMessage,
+            'uuid.uuid'     => $this->defaultErrorMessage,
+        ]*/);
 
-        $saved = $service->save($request->get('username'));
+        $saved = $service->save($request);
 
         return !$saved ? response()->json([
-            'message' => 'Failed to create room'
+            'message' => $this->defaultErrorMessage
         ], Response::HTTP_INTERNAL_SERVER_ERROR) : response()->json($saved);
 
     }

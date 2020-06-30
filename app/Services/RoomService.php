@@ -24,7 +24,8 @@ class RoomService
         return [
             'username'  => 'required|max:15|min:3|string',
             'recaptcha' => ['required', 'string', new RecaptchaRule()],
-            'uuid'      => 'required|uuid'
+            'uuid'      => 'required|uuid',
+            'gender'    => 'required|in:male,female'
         ];
     }
 
@@ -37,6 +38,7 @@ class RoomService
             'user'    => $request->get('username'),
             'room_id' => $uuid,
             'user_id' => $request->get('uuid'),
+            'gender'  => $request->get('gender'),
             'users'   => []
         ]), 'ex', $expire) ? app('redis')->get($uuid) : false;
     }

@@ -12,10 +12,7 @@ class RoomController extends Controller
 
     public function store(RoomService $service, Request $request)
     {
-        $this->validate($request, $service->rules()/*, [
-            'uuid.required' => $this->defaultErrorMessage,
-            'uuid.uuid'     => $this->defaultErrorMessage,
-        ]*/);
+        $this->validate($request, $service->rules());
 
         $saved = $service->save($request);
 

@@ -22,9 +22,9 @@ class RoomController extends Controller
 
     }
 
-    public function get($uuid)
+    public function get($room_id, $user_id)
     {
-        return response()->json(app('redis')->get($uuid));
+        return response()->json(app('redis')->get($room_id));
     }
 
     public function all()

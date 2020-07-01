@@ -24,7 +24,7 @@ class RoomService
         return [
             'username'  => 'required|max:15|min:3|string',
             'recaptcha' => ['required', 'string', new RecaptchaRule()],
-            'uuid'      => 'required|uuid',
+            'user_id'   => 'required|uuid',
             'gender'    => 'required|in:male,female'
         ];
     }
@@ -34,12 +34,20 @@ class RoomService
         $uuid = $this->createHash();
         $expire = $this->createExpire();
 
-        return app('redis')->set($uuid, json_encode([
-            'user'    => $request->get('username'),
+        $request->merge([
             'room_id' => $uuid,
-            'user_id' => $request->get('uuid'),
-            'gender'  => $request->get('gender'),
-            'users'   => []
+        ]);
+
+        return app('redis')->set($request->get('room_id'), json_encode([
+            'room_id' => $request->get('room_id'),
+            'owner'   => $request->get('user_id'),
+            'users'   => [
+                [
+                    'username' => $request->get('username'),
+                    'user_id'  => $request->get('user_id'),
+                    'gender'   => $request->get('gender'),
+                ]
+            ],
         ]), 'ex', $expire) ? app('redis')->get($uuid) : false;
     }
 

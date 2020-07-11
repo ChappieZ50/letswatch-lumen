@@ -12,7 +12,6 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
 $router->get('/', function () {
 
 });
@@ -21,5 +20,8 @@ $router->group(['prefix' => '/room'], function () use ($router) {
     $router->post('', 'RoomController@store');
     $router->get('/', 'RoomController@all');
     $router->get('/{room_id}/user/{user_id}', 'RoomController@get');
-    $router->delete('/', 'RoomController@destroy'); // TODO Only on Local
+});
+
+$router->group(['prefix' => '/video-actions'], function () use ($router) {
+    $router->post('/on-playing', 'VideoController@onPlaying');
 });

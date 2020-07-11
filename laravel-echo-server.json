@@ -1,0 +1,42 @@
+{
+  "authHost": "http://localhost:8000",
+  "authEndpoint": "/broadcasting/auth",
+  "clients": [
+    {
+      "appId": "b4dd9de837eef2dd",
+      "key": "3548a2c195c864b99de304e3d0470da1"
+    }
+  ],
+  "database": "redis",
+  "databaseConfig": {
+    "redis": {
+      "port": "6379",
+      "host": "127.0.0.1",
+      "db": "0",
+      "password": "qbOhygE0Kp1h4W8qpbGeoB/TN6QiJVVCl29OhznvWUF9n3fg56rEYiRX8Fx8J55FMDwIFRVVooWy4pkFchappie"
+    },
+    "sqlite": {
+      "databasePath": "/database/laravel-echo-server.sqlite"
+    }
+  },
+  "devMode": true,
+  "host": null,
+  "port": "6001",
+  "protocol": "http",
+  "socketio": {},
+  "secureOptions": 67108864,
+  "sslCertPath": "",
+  "sslKeyPath": "",
+  "sslCertChainPath": "",
+  "sslPassphrase": "",
+  "subscribers": {
+    "http": true,
+    "redis": true
+  },
+  "apiOriginAllow": {
+    "allowCors": true,
+    "allowOrigin": "http://localhost:80",
+    "allowMethods": "GET, POST, PUT, DELETE",
+    "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+  }
+}

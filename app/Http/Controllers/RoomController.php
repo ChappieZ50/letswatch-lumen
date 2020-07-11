@@ -31,9 +31,4 @@ class RoomController extends Controller
     {
         return app('redis')->keys('*');
     }
-
-    public function destroy()
-    {
-        return app('redis')->flushdb();
-    }
 }

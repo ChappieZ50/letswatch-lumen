@@ -17,14 +17,18 @@ $router->get('/', function () {
 });
 
 $router->group(['prefix' => '/room'], function () use ($router) {
+    $router->get('/{roomId}/user/{userId}', 'RoomController@get');
+
     $router->post('/', 'RoomController@store');
     $router->post('/join', 'RoomController@join');
+    $router->post('/new-player', 'RoomController@newPlayer');
+
     $router->delete('/{roomId}/user/{userId}', 'RoomController@destroy');
+
 
     $router->delete('/', 'RoomController@flush');// TODO WILL BE DELETED ON PRODUCTION
     $router->get('/', 'RoomController@all'); // TODO WILL BE DELETED ON PRODUCTION
 
-    $router->get('/{roomId}/user/{userId}', 'RoomController@get');
 });
 
 $router->group(['prefix' => '/video-actions'], function () use ($router) {

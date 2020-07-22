@@ -89,28 +89,10 @@ class RoomService
                 // Saving new room data
                 return app('redis')->set($roomId, json_encode($room)) ? app('redis')->get($roomId) : false;
             }
-           // If user already in this room then get room
+            // If user already in this room then get room
             return app('redis')->get($roomId);
         }
 
-        return false;
-    }
-
-    public function userInRoom($roomId, $userId)
-    {
-        // Getting room and json decoding
-        $room = json_decode(app('redis')->get($roomId));
-        // If users key exists and users not empty
-        if (isset($room->users) && !empty($room->users)) {
-            foreach ($room->users as $user) {
-                // Finding user
-                if ($user->user_id === $userId) {
-                    // If user in this room then return this room
-                    return $room;
-                    break;
-                }
-            }
-        }
         return false;
     }
 
@@ -134,11 +116,41 @@ class RoomService
         return app('redis')->set($roomId, json_encode($room)) ? app('redis')->get($roomId) : false;
     }
 
+    public function userInRoom($roomId, $userId, $room = false)
+    {
+        // Getting room and json decoding
+        if ($room === false)
+            $room = json_decode(app('redis')->get($roomId));
+
+        // If users key exists and users not empty
+        if (isset($room->users) && !empty($room->users)) {
+            foreach ($room->users as $user) {
+                // Finding user
+                if ($user->user_id === $userId) {
+                    // If user in this room then return this room
+                    return $room;
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+
     public function exists($roomId)
     {
         // Getting room
         $room = app('redis')->get($roomId);
         // If room not empty (exists) return decoded room else return false
         return !empty($room) ? json_decode($room) : false;
+    }
+
+    public function userAndRoomExists($roomId, $userId)
+    {
+        // If room exists
+        if ($room = $this->exists($roomId)) {
+            // If user in this room return room else return false
+            return $this->userInRoom($roomId, $userId, $room);
+        }
+        return false;
     }
 }

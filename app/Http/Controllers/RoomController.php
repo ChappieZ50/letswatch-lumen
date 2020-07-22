@@ -5,12 +5,23 @@ namespace App\Http\Controllers;
 use App\Events\OnClose;
 use App\Events\OnConnect;
 use App\Events\OnExit;
+use App\Events\OnPlayer;
 use App\Services\RoomService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class RoomController extends Controller
 {
+    public function get($roomId, $userId, RoomService $service)
+    {
+        $room = $service->userInRoom($roomId, $userId);
+        // If user not in room
+        if ($room === false)
+            return response()->json(['message' => 'You cant access this room'], Response::HTTP_UNAUTHORIZED);
+
+        return response()->json($room);
+    }
+
     public function store(RoomService $service, Request $request)
     {
         // Validating request
@@ -47,14 +58,38 @@ class RoomController extends Controller
         return response()->json(['message' => 'Failed to join room'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    public function get($roomId, $userId, RoomService $service)
+    public function newPlayer(Request $request, RoomService $service)
     {
-        $room = $service->userInRoom($roomId, $userId);
-        // If user not in room
-        if ($room === false)
-            return response()->json(['message' => 'You cant access this room'], Response::HTTP_UNAUTHORIZED);
+        // Validating data
+        $this->validate($request, [
+            'url'     => 'required',
+            'type'    => 'required|string',
+            'seek'    => 'required|numeric',
+            'user_id' => 'required|uuid',
+            'room_id' => 'required|uuid',
+        ], [
+            'room_id.uuid' => 'Room not found'
+        ]);
+        $roomId = $request->get('room_id');
+        $userId = $request->get('user_id');
 
-        return response()->json($room);
+        // If user and room exists
+        if ($room = $service->userAndRoomExists($roomId, $userId)) {
+            // Changing data
+            $room->player = [
+                'url'  => $request->get('url'),
+                'type' => $request->get('type'),
+                'seek' => $request->get('seek'),
+            ];
+            // Saving new player data to room
+            if (app('redis')->set($roomId, json_encode($room))) {
+                // Firing OnPlayer event for all browsers
+                event(new OnPlayer($roomId,$room));
+                return response()->json($room);
+            }
+            return response()->json(['message' => 'Failed to change player'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return response()->json(['message' => 'Room or user not found'], Response::HTTP_NOT_FOUND);
     }
 
     public function destroy($roomId, $userId, RoomService $service)

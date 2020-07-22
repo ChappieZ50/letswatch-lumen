@@ -2,10 +2,6 @@
 
 namespace App\Services;
 
-use App\Rules\RecaptchaRule;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-
 class VideoService
 {
     public function setSeek($seek, $room)
@@ -18,7 +14,7 @@ class VideoService
             'type' => $room->player->type,
             'seek' => $seek
         ];
-
+        // Override room to new room data
         return app('redis')->set($room->room_id, json_encode($room), 'ex', $roomService->createExpire());
     }
 }

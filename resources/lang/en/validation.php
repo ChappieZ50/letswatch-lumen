@@ -150,6 +150,7 @@ return [
         'username'  => 'Username',
         'recaptcha' => 'Recaptcha',
         'gender'    => 'Gender',
+        'room_id'   => 'Room ID'
     ],
 
 ];

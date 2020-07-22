@@ -6,23 +6,18 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
-class OnPlaying implements ShouldBroadcast
+class OnPlayer implements ShouldBroadcast
 {
 
     use SerializesModels;
 
-    public $playing;
-    public $seek;
     public $roomId;
-    public $userId;
+    public $room;
 
-    public function __construct($playing, $seek, $roomId, $userId)
+    public function __construct($roomId,$room)
     {
-        $this->playing = $playing;
-        $this->seek = $seek;
-
         $this->roomId = $roomId;
-        $this->userId = $userId;
+        $this->room = $room;
     }
 
     public function broadcastOn()
@@ -33,10 +28,8 @@ class OnPlaying implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'status'  => true,
-            'playing' => $this->playing,
-            'seek'    => $this->seek,
-            'user_id' => $this->userId,
+            'status' => true,
+            'room'   => $this->room
         ];
     }
 }

@@ -136,6 +136,19 @@ class RoomService
         return false;
     }
 
+    public function getUserInRoom($room, $userId)
+    {
+
+        foreach ($room->users as $user) {
+            // Finding user
+            if ($user->user_id === $userId) {
+                return $user;
+                break;
+            }
+        }
+        return false;
+    }
+
     public function exists($roomId)
     {
         // Getting room

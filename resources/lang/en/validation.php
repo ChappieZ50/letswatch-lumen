@@ -150,7 +150,9 @@ return [
         'username'  => 'Username',
         'recaptcha' => 'Recaptcha',
         'gender'    => 'Gender',
-        'room_id'   => 'Room ID'
+        'room_id'   => 'Room',
+        'user_id'   => 'User',
+        'message'   => 'Message'
     ],
 
 ];

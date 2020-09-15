@@ -28,7 +28,11 @@ $router->group(['prefix' => '/room'], function () use ($router) {
 
     $router->delete('/', 'RoomController@flush');// TODO WILL BE DELETED ON PRODUCTION
     $router->get('/', 'RoomController@all'); // TODO WILL BE DELETED ON PRODUCTION
+});
 
+$router->group(['prefix' => '/chat'], function () use ($router) {
+    $router->get('/', 'ChatController@get');
+    $router->post('/', 'ChatController@store');
 });
 
 $router->group(['prefix' => '/video-actions'], function () use ($router) {

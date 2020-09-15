@@ -84,7 +84,7 @@ class RoomController extends Controller
             // Saving new player data to room
             if (app('redis')->set($roomId, json_encode($room))) {
                 // Firing OnPlayer event for all browsers
-                event(new OnPlayer($roomId,$room));
+                event(new OnPlayer($roomId, $room));
                 return response()->json($room);
             }
             return response()->json(['message' => 'Failed to change player'], Response::HTTP_INTERNAL_SERVER_ERROR);

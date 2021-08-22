@@ -24,10 +24,6 @@ $router->group(['prefix' => '/room'], function () use ($router) {
     $router->post('/new-player', 'RoomController@newPlayer');
 
     $router->delete('/{roomId}/user/{userId}', 'RoomController@destroy');
-
-
-    $router->delete('/', 'RoomController@flush');// TODO WILL BE DELETED ON PRODUCTION
-    $router->get('/', 'RoomController@all'); // TODO WILL BE DELETED ON PRODUCTION
 });
 
 $router->group(['prefix' => '/chat'], function () use ($router) {

@@ -13,7 +13,7 @@
       "port": "6379",
       "host": "127.0.0.1",
       "db": "0",
-      "password": "qbOhygE0Kp1h4W8qpbGeoB/TN6QiJVVCl29OhznvWUF9n3fg56rEYiRX8Fx8J55FMDwIFRVVooWy4pkFchappie"
+      "password": "aeHs/Ky3o4EEtRWgJ7ZN9xZNRYAnh+8LRy9TiRW9e94wQ3FQK14Hep+gsKE0jmRaPP4YTgpp+TwLM7We"
     },
     "sqlite": {
       "databasePath": "/database/laravel-echo-server.sqlite"

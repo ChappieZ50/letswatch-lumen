@@ -48,7 +48,7 @@ class RoomService
             // Creating expiring time
             $expire = $this->createExpire();
 
-            // Createing room data
+            // Creating room data
             return app('redis')->set($roomId, json_encode([
                 'room_id'  => $roomId,
                 'owner_id' => $request->get('user_id'),

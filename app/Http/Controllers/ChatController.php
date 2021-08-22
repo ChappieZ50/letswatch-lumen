@@ -54,12 +54,4 @@ class ChatController extends Controller
 
         return response()->json(['message' => 'Room not found'], Response::HTTP_NOT_FOUND);
     }
-
-    /* TODO */
-    public function get(Client $client)
-    {
-        //$this->redis->flushDb();
-        dd(json_decode($this->redis->get('71d5a4ed-e3e1-4b01-9a64-5d28b1d1b2a4')));
-        dd($this->redis->keys('*'));
-    }
 }
